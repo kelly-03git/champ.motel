@@ -1,68 +1,221 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import sqlite3
-
-app = Flask("champ_motel")
-CORS(app)
-
-DATABASE = "motel.db"
 
 
-def init_db():
-    conn = sqlite3.connect(DATABASE)
+    return """
+<!DOCTYPE html>
+<html>
+<head>
 
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS bookings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            check_in TEXT NOT NULL,
-            check_out TEXT NOT NULL,
-            room_type TEXT NOT NULL,
-            guests INTEGER NOT NULL
-        )
-    """)
+    <title>Champ Motel</title>
 
-    conn.commit()
-    conn.close()
+    <meta name="description"
+          content="Welcome to Champ Motel">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            text-align: center;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 30px;
+        }
+
+        header h1 {
+            font-size: 40px;
+        }
+
+        nav {
+            background: #444;
+            padding: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+        }
+
+        .hero {
+            background: white;
+            padding: 70px 20px;
+        }
+
+        .hero h2 {
+            font-size: 40px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #222;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .rooms {
+            padding: 40px 20px;
+        }
+
+        .room {
+            background: white;
+            width: 280px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .about {
+            background: #ddd;
+            padding: 40px 20px;
+        }
+
+        .contact {
+            background: white;
+            padding: 40px 20px;
+        }
+
+        footer {
+            background: #222;
+            color: white;
+            padding: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>Champ Motel</h1>
+
+        <p>Comfort • Peace • Hospitality</p>
+
+    </header>
 
 
-@app.route("/")
-def home():
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="#rooms">Rooms</a>
+
+        <a href="#about">About</a>
+
+        <a href="#contact">Contact</a>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <h2>Welcome to Champ Motel</h2>
+
+        <p>
+            Enjoy a comfortable and peaceful stay
+            at Champ Motel.
+        </p>
+
+        <a href="#rooms" class="button">
+            Explore Rooms
+        </a>
+
+    </section>
+
+
+    <section class="rooms" id="rooms">
+
+        <h2>Our Rooms</h2>
+
+        <div class="room">
+
+            <h3>Single Room</h3>
+
+            <p>Comfortable room for one guest.</p>
+
+            <b>₹1000 / Night</b>
+
+        </div>
+
+
+        <div class="room">
+
+            <h3>Double Room</h3>
+
+            <p>Comfortable room for two guests.</p>
+
+            <b>₹1800 / Night</b>
+
+        </div>
+
+
+        <div class="room">
+
+            <h3>Family Room</h3>
+
+            <p>Spacious room for families.</p>
+
+            <b>₹2500 / Night</b>
+
+        </div>
+
+    </section>
+
+
+    <section class="about" id="about">
+
+        <h2>About Champ Motel</h2>
+
+        <p>
+            Champ Motel is a comfortable place
+            to stay and relax.
+        </p>
+
+    </section>
+
+
+    <section class="contact" id="contact">
+
+        <h2>Contact Us</h2>
+
+        <p>Phone: +91 98765 43210</p>
+
+        <p>Email: info@champmotel.com</p>
+
+    </section>
+
+
+    <footer>
+
+        <p>© 2026 Champ Motel</p>
+
+    </footer>
+
+</body>
+</html>
+"""
+
+
+@app.route("/api/status")
+def status():
+
     return jsonify({
         "message": "Champ Motel Backend is running!",
         "status": "success"
     })
 
 
-@app.route("/api/bookings", methods=["POST"])
-def create_booking():
-    data = request.get_json()
+if _name_ == "_main_":
 
-    conn = sqlite3.connect(DATABASE)
-
-    conn.execute("""
-        INSERT INTO bookings
-        (name, email, check_in, check_out, room_type, guests)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        data["name"],
-        data["email"],
-        data["check_in"],
-        data["check_out"],
-        data["room_type"],
-        data["guests"]
-    ))
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({
-        "message": "Booking saved successfully!",
-        "status": "success"
-    }), 201
-
-
-if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
